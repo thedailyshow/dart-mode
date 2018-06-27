@@ -1521,7 +1521,7 @@ Key bindings:
   (modify-syntax-entry ?*  ". 23")
   (modify-syntax-entry ?\n "> b")
   (modify-syntax-entry ?\' "\"")
-  (set (make-local-variable 'electric-indent-chars) '(?\n ?\) ?] ?}))
+  (setq-local electric-indent-chars '(?\n ?\) ?\] ?\}))
   (setq comment-start "//")
   (setq comment-end "")
   (setq fill-column 80)
