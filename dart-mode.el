@@ -1673,8 +1673,9 @@ initialization.
 
 Key bindings:
 \\{dart-mode-map}"
-  (modify-syntax-entry ?/ "_ 12")
-  (modify-syntax-entry ?\n ">")
+  (modify-syntax-entry ?/  "_ 124b")
+  (modify-syntax-entry ?*  ". 23")
+  (modify-syntax-entry ?\n "> b")
   (modify-syntax-entry ?\' "\"")
   (setq-local electric-indent-chars '(?\n ?\x28 ?\x5d ?\x7d))
   (setq comment-start "//")
