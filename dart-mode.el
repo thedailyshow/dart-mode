@@ -381,6 +381,46 @@ Returns nil if `dart-sdk-path' is nil."
 
 (setq dart--types-re (rx (eval (dart--identifier 'upper))))
 
+(defvar dart-string-interpolation-face 'font-lock-string-face
+  "Major modes for groovy, kotlin, php, ruby, etc, fontify string
+interpolation with `font-lock-variable-name-face'.")
+
+(defvar dart-string-interpolation-fontify-escape nil
+  "If non-nil, `dart-string-interpolation-face' will be applied
+to string interpolation string characters, \"$\", \"{\",
+\"}\"")
+
+(defun dart--string-interpolation-func (limit)
+  (catch 'result
+    (let (beg end match syntax)
+      (while (re-search-forward
+              (rx (or (and ?$
+                           (group
+                            (zero-or-more ?_)
+                            lower
+                            (zero-or-more (or ?_ alnum))))
+                      (and ?$
+                           ?\x7b
+                           (group (zero-or-more (not (any ?\x7d))))
+                           ?\x7d)))
+              limit t)
+        (setq match
+              (if dart-string-interpolation-fontify-escape
+                  0
+                (1- (/ (length (match-data)) 2))))
+        (setq beg (match-beginning match))
+        (setq end (match-end match))
+        (setq syntax (syntax-ppss))
+        (when (and (nth 3 syntax)
+                   (or (= (nth 8 syntax) 1)
+                       (/= (char-before (nth 8 syntax)) ?r)))
+          (set-match-data (list beg end))
+          (goto-char end)
+          (throw 'result t))
+        (when end
+          (goto-char end)))
+      (throw 'result nil))))
+
 (defun dart--function-declaration-func (limit)
   (catch 'result
     (let (beg end)
@@ -485,7 +525,8 @@ Returns nil if `dart-sdk-path' is nil."
           . (dart--declared-identifier-next-func
              nil
              nil
-             (0 font-lock-variable-name-face))))))
+             (0 font-lock-variable-name-face)))
+         (dart--string-interpolation-func     (0 ,dart-string-interpolation-face t)))))
 
 (setq string-delimiter (rx (and
                             ;; Match even number of backslashes.
