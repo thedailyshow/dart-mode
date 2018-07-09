@@ -381,6 +381,9 @@ Returns nil if `dart-sdk-path' is nil."
 
 (setq dart--types-re (rx (eval (dart--identifier 'upper))))
 
+(defvar dart-number-face nil
+  "Face to fontify numbers with.")
+
 (defvar dart-string-interpolation-face 'font-lock-variable-name-face
   "Major modes for groovy, kotlin, php, ruby, etc, fontify string
 interpolation with `font-lock-variable-name-face'.")
@@ -546,8 +549,8 @@ to string interpolation string characters, \"$\", \"{\",
          ,(regexp-opt dart--keywords 'words)
          (,(regexp-opt dart--builtins 'words)  . font-lock-builtin-face)
          (,(regexp-opt dart--constants 'words) . font-lock-constant-face)
-         (,dart--hex-number-re                 . (1 font-lock-constant-face))
-         (,dart--number-re                     . (1 font-lock-constant-face))
+         (,dart--hex-number-re                 . (1 dart-number-face))
+         (,dart--number-re                     . (1 dart-number-face))
          (,dart--metadata-re                   . font-lock-constant-face)
          (,(regexp-opt dart--types 'words)     . font-lock-type-face)
          (,dart--types-re                      . font-lock-type-face)
