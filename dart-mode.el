@@ -400,9 +400,9 @@ to string interpolation string characters, \"$\", \"{\",
                             lower
                             (zero-or-more (or ?_ alnum))))
                       (and ?$
-                           ?\x7b
-                           (group (zero-or-more (not (any ?\x7d))))
-                           ?\x7d)))
+                           ?\{
+                           (group (zero-or-more (not (any ?\}))))
+                           ?\})))
               limit t)
         (setq match
               (if dart-string-interpolation-fontify-escape
@@ -469,7 +469,7 @@ to string interpolation string characters, \"$\", \"{\",
       (condition-case nil
           (backward-up-list)
         (scan-error (throw 'result nil)))
-      (when (member (char-after (point)) '(?\x5b ?\x7b)) ; ?[ ?{
+      (when (member (char-after (point)) '(?\[ ?\{))
         (condition-case nil
             (backward-up-list)
           (scan-error (throw 'result nil))))
@@ -1778,7 +1778,7 @@ Key bindings:
   (modify-syntax-entry ?*  ". 23")
   (modify-syntax-entry ?\n "> b")
   (modify-syntax-entry ?\' "\"")
-  (setq-local electric-indent-chars '(?\n ?\x28 ?\x5d ?\x7d))
+  (setq-local electric-indent-chars '(?\n ?\x28 ?\] ?\}))
   (setq comment-start "//")
   (setq comment-end "")
   (setq fill-column 80)
