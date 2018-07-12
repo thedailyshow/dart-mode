@@ -291,11 +291,11 @@ Returns nil if `dart-sdk-path' is nil."
     (back-to-indentation)
     (let ((depth (car (syntax-ppss))))
       (when (and (char-after)
-                 (= (char-syntax (char-after)) ?\x29))
+                 (= (char-syntax (char-after)) ?\)))
         (while (and (char-after)
-                    (/= (char-syntax (char-after)) ?\x28)
+                    (/= (char-syntax (char-after)) ?\()
                     (/= (char-after) ?\C-j))
-          (when (= (char-syntax (char-after)) ?\x29)
+          (when (= (char-syntax (char-after)) ?\))
             (setq depth (1- depth)))
           (forward-char)))
       depth)))
@@ -453,7 +453,7 @@ to string interpolation string characters, \"$\", \"{\",
   (catch 'result
     (let (beg end)
       (while (re-search-forward
-              (rx (group (eval (dart--identifier 'lower))) ?\x28) limit t)
+              (rx (group (eval (dart--identifier 'lower))) ?\)) limit t)
         (setq beg (match-beginning 1))
         (setq end (match-end 1))
         (up-list)
@@ -501,7 +501,7 @@ to string interpolation string characters, \"$\", \"{\",
         (condition-case nil
             (backward-up-list)
           (scan-error (throw 'result nil))))
-      (throw 'result (= (char-after (point)) ?\x28))))) ; ?\(
+      (throw 'result (= (char-after (point)) ?\()))))
 
 (defun dart--declared-identifier-anchor-func (limit)
   (catch 'result
@@ -1807,7 +1807,7 @@ Key bindings:
   (modify-syntax-entry ?*  ". 23")
   (modify-syntax-entry ?\n "> b")
   (modify-syntax-entry ?\' "\"")
-  (setq-local electric-indent-chars '(?\n ?\x28 ?\] ?\}))
+  (setq-local electric-indent-chars '(?\n ?\) ?\] ?\}))
   (setq comment-start "//")
   (setq comment-end "")
   (setq fill-column 80)
