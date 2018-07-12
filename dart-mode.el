@@ -456,12 +456,15 @@ to string interpolation string characters, \"$\", \"{\",
               (rx (group (eval (dart--identifier 'lower))) ?\() limit t)
         (setq beg (match-beginning 1))
         (setq end (match-end 1))
-        (up-list)
-        (when (looking-at (rx (one-or-more space)
-                              (or "async" "async*" "sync*" "{" "=>")))
-          (set-match-data (list beg end))
-          (goto-char end)
-          (throw 'result t))
+        (condition-case nil
+            (progn
+              (up-list)
+              (when (looking-at (rx (one-or-more space)
+                                    (or "async" "async*" "sync*" "{" "=>")))
+                (set-match-data (list beg end))
+                (goto-char end)
+                (throw 'result t)))
+          (scan-error nil))
         (goto-char end))
       (throw 'result nil))))
 
