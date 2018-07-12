@@ -453,7 +453,7 @@ to string interpolation string characters, \"$\", \"{\",
   (catch 'result
     (let (beg end)
       (while (re-search-forward
-              (rx (group (eval (dart--identifier 'lower))) ?\)) limit t)
+              (rx (group (eval (dart--identifier 'lower))) ?\() limit t)
         (setq beg (match-beginning 1))
         (setq end (match-end 1))
         (up-list)
