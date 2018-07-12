@@ -282,12 +282,18 @@ Returns nil if `dart-sdk-path' is nil."
 (define-key dart-mode-map (kbd "C-c C-o") 'dart-format)
 (define-key dart-mode-map (kbd "M-/") 'dart-expand)
 (define-key dart-mode-map (kbd "M-?") 'dart-expand-parameters)
-(define-key dart-mode-map (kbd "<tab>") 'dart-indent-simple)
+(define-key dart-mode-map (kbd "TAB") 'dart-indent-line-or-region)
 (define-key dart-mode-map (kbd "<backtab>") 'dart-dedent-simple)
-(define-key dart-mode-map (kbd "<M-tab>") 'indent-according-to-mode)
+(define-key dart-mode-map (kbd "C-c C-i") 'indent-according-to-mode)
 
 
 ;;; CC indentation support
+
+(defun dart-indent-line-or-region (start end)
+  (interactive "r")
+  (if (use-region-p)
+      (indent-region-line-by-line start end)
+    (dart-indent-simple)))
 
 (defun dart-indent-simple (&optional backwards)
   (interactive)
