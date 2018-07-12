@@ -420,7 +420,7 @@ to string interpolation string characters, \"$\", \"{\",
   ;; When we run out of search results, return nil.
   (catch 'result
     (let (sigil beg open close end syntax depth)
-      (while (and (search-forward "${" limit nil)
+      (while (and (search-forward "${" limit t)
                   (save-excursion
                     (and (nth 3 (syntax-ppss))
                          (not (eq (char-before (nth 8 (syntax-ppss))) ?r)))))
