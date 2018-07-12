@@ -381,7 +381,7 @@ Returns nil if `dart-sdk-path' is nil."
 
 (setq dart--types-re (rx (eval (dart--identifier 'upper))))
 
-(defvar dart-string-interpolation-face 'font-lock-string-face
+(defvar dart-string-interpolation-face 'font-lock-variable-name-face
   "Major modes for groovy, kotlin, php, ruby, etc, fontify string
 interpolation with `font-lock-variable-name-face'.")
 
@@ -558,8 +558,12 @@ to string interpolation string characters, \"$\", \"{\",
              nil
              nil
              (0 font-lock-variable-name-face)))
-         (dart--string-interpolation-id-func   (2 ,dart-string-interpolation-face t))
-         (dart--string-interpolation-exp-func  (2 ,dart-string-interpolation-face t)))))
+         (dart--string-interpolation-id-func   (1 ,dart-string-interpolation-face t)
+                                               (2 ,dart-string-interpolation-face t))
+         (dart--string-interpolation-exp-func  (1 ,dart-string-interpolation-face t)
+                                               (2 ,dart-string-interpolation-face t)
+                                               (3 ,dart-string-interpolation-face t)
+                                               (4 ,dart-string-interpolation-face t)))))
 
 (setq string-delimiter (rx (and
                             ;; Match even number of backslashes.
