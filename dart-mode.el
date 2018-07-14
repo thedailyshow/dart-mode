@@ -291,11 +291,11 @@ Returns nil if `dart-sdk-path' is nil."
     (back-to-indentation)
     (let ((depth (car (syntax-ppss))))
       (when (and (char-after)
-                 (= (char-syntax (char-after)) ?\x29))
+                 (= (char-syntax (char-after)) ?\)))
         (while (and (char-after)
-                    (/= (char-syntax (char-after)) ?\x28)
+                    (/= (char-syntax (char-after)) ?\()
                     (/= (char-after) ?\C-j))
-          (when (= (char-syntax (char-after)) ?\x29)
+          (when (= (char-syntax (char-after)) ?\))
             (setq depth (1- depth)))
           (forward-char)))
       depth)))
@@ -385,7 +385,7 @@ Returns nil if `dart-sdk-path' is nil."
   (catch 'result
     (let (beg end)
       (while (re-search-forward
-              (rx (group (eval (dart--identifier 'lower))) ?\x28) limit t)
+              (rx (group (eval (dart--identifier 'lower))) ?\() limit t)
         (setq beg (match-beginning 1))
         (setq end (match-end 1))
         (condition-case nil
@@ -433,11 +433,11 @@ Returns nil if `dart-sdk-path' is nil."
       (condition-case nil
           (backward-up-list)
         (scan-error (throw 'result nil)))
-      (when (member (char-after (point)) '(?\x5b ?\x7b)) ; ?[ ?{
+      (when (member (char-after (point)) '(?\[ ?\{))
         (condition-case nil
             (backward-up-list)
           (scan-error (throw 'result nil))))
-      (throw 'result (= (char-after (point)) ?\x28))))) ; ?\(
+      (throw 'result (= (char-after (point)) ?\()))))
 
 (defun dart--declared-identifier-anchor-func (limit)
   (catch 'result
@@ -1680,7 +1680,7 @@ Key bindings:
   (modify-syntax-entry ?/ "_ 12")
   (modify-syntax-entry ?\n ">")
   (modify-syntax-entry ?\' "\"")
-  (setq-local electric-indent-chars '(?\n ?\x28 ?\x5d ?\x7d))
+  (setq-local electric-indent-chars '(?\n ?\) ?\] ?\}))
   (setq comment-start "//")
   (setq comment-end "")
   (setq fill-column 80)
